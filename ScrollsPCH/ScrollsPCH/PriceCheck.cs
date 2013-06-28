@@ -45,6 +45,7 @@ namespace ScrollsPCH
         {
             try
             {
+                Console.WriteLine("[SPCH Server Response] " + result);
                 APIResult ar = (APIResult)new JsonReader().Read(result, System.Type.GetType("APIResult"));
                 if (ar.msg.Equals("success"))
                 {
@@ -62,11 +63,13 @@ namespace ScrollsPCH
                 else
                 {
                     msg(String.Format("<color=#ede79f>Failed to load price for scroll </color><color=#eae8ce>'{0}'</color>.", playerName));
+                    Console.WriteLine("[SPCH] Scroll not found");
                 }
             }
-            catch
+            catch (Exception e)
             {
                 msg(String.Format("<color=#ede79f>Failed to load price for scroll </color><color=#eae8ce>'{0}'</color><color=#ede79f>. Try again later.</color>", playerName));
+                Console.WriteLine("[SPCH] proc() Exception caught: "+e.Message);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace ScrollsPCH
 		protected void msg(String txt)
 		{
 			RoomChatMessageMessage rcmm = new RoomChatMessageMessage();
-            rcmm.from = "<color=#288A28>ScrollsPC</color>";
+            rcmm.from = "<color=#288A28>ScrollsPC.com</color>";
 			rcmm.text = txt;
 			rcmm.roomName = App.ArenaChat.ChatRooms.GetCurrentRoom();
 
