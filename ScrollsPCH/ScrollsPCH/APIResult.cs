@@ -15,4 +15,5 @@ public class DataDeserialiser
 	public String name;
 	public String price;
     public String price_max;
+    public String live_price;
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using JsonFx.Json;
+using System.Security.Cryptography;
 
 namespace ScrollsPCH
 {
@@ -25,6 +26,7 @@ namespace ScrollsPCH
 		public ScrollsPCHelper()
 		{
 			commands.Add(new PriceCheck());
+            commands.Add(new PriceCheckNew());
             App.Communicator.addListener(this);
 		}
 
@@ -138,7 +140,7 @@ namespace ScrollsPCH
                     string hiscards_string = jw.Write(hisCardsD);
 
                     Console.WriteLine("[MyID] "+myid);
-                    string myParameters = "fromto=" + fromto + "&mycards=" + mycards_string + "&hiscards=" + hiscards_string + "&mygold=" + myGold + "&hisgold=" + hisGold + "&uid="+myid;
+                    string myParameters = "fromto=" + fromto + "&mycards=" + mycards_string + "&hiscards=" + hiscards_string + "&mygold=" + myGold + "&hisgold=" + hisGold + "&uid=" + CalculateMD5Hash(myid);
                     WebClientTimeOut wc = new WebClientTimeOut();
                     wc.Headers.Add("user-agent", "ScrollsPCH/2.0");
                     wc.TimeOut = 5000;
@@ -275,5 +277,22 @@ namespace ScrollsPCH
         {
             throw new NotImplementedException();
         }
+
+        public string CalculateMD5Hash(string input)
+        {
+            // step 1, calculate MD5 hash from input
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            // step 2, convert byte array to hex string
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
     }
 }

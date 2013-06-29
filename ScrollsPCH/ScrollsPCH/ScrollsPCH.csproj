@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="APIResult.cs" />
     <Compile Include="ChatComm.cs" />
+    <Compile Include="PriceCheckNew.cs" />
     <Compile Include="ScrollsPCHelper.cs" />
     <Compile Include="PriceCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,15 +5,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
+
 namespace ScrollsPCH
 {
-    class PriceCheck : ChatComm
+    class PriceCheckNew : ChatComm
     {
         public override bool hooksSend(RoomChatMessageMessage rcmm)
         {
-            if (rcmm.text.StartsWith("/price") || rcmm.text.StartsWith("/pc") || rcmm.text.StartsWith("/pricecheck"))
+            if (rcmm.text.StartsWith("/lpc") || rcmm.text.StartsWith("/npc") || rcmm.text.StartsWith("/2pc"))
             {
-                String[] splitted = rcmm.text.Split(new char[] {' '}, 2, StringSplitOptions.None);
+                String[] splitted = rcmm.text.Split(new char[] { ' ' }, 2, StringSplitOptions.None);
 
                 if (splitted.Length >= 2)
                 {
@@ -32,6 +33,7 @@ namespace ScrollsPCH
 
         private void loadPlayerInfo(String playerName)
         {
+
             WebClientTimeOut wc = new WebClientTimeOut();
             wc.TimeOut = 5000;
             wc.DownloadStringCompleted += (sender, e) =>
@@ -45,7 +47,7 @@ namespace ScrollsPCH
             catch (Exception e)
             {
                 msg(String.Format("<color=#ede79f>WebClient exception - contact the author of this plugin or try again later.</color>"));
-                Console.WriteLine("[SPCH WebClient Exception] " + e.Message);
+                Console.WriteLine("[SPCH WebClient Exception] "+e.Message);
             }
         }
 
@@ -57,16 +59,26 @@ namespace ScrollsPCH
                 APIResult ar = (APIResult)new JsonReader().Read(result, System.Type.GetType("APIResult"));
                 if (ar.msg.Equals("success"))
                 {
-                    String price;
-                    if (Convert.ToInt32(ar.data.price_max) == 0)
+                    if (ar.data.live_price != null)
                     {
-                        price = ar.data.price;
+                        msg(String.Format("<color=#eae8ce>{0}</color>'s <color=#ede79f>Live Price currently is</color> <color=#FFCC00>{1} Gold</color>.", ar.data.name, ar.data.live_price));
                     }
                     else
                     {
-                        price = ar.data.price + '-' + ar.data.price_max;
-                    }
-                    msg(String.Format("<color=#eae8ce>{0}</color> <color=#ede79f>currently costs</color> <color=#FFCC00>{1} Gold</color>.", ar.data.name, price));
+
+                        String price;
+                        if (Convert.ToInt32(ar.data.price_max) == 0)
+                        {
+                            price = ar.data.price;
+                        }
+                        else
+                        {
+                            price = ar.data.price + '-' + ar.data.price_max; 
+                        }
+                        msg(String.Format("<color=#ede79f>There currently isn't a live price for </color><color=#eae8ce>{0}</color>. Its static price is <color=#FFCC00>{1} Gold</color>.", ar.data.name, price));
+
+                        
+                    }            
                 }
                 else
                 {
@@ -77,7 +89,7 @@ namespace ScrollsPCH
             catch (Exception e)
             {
                 msg(String.Format("<color=#ede79f>Failed to load price for scroll </color><color=#eae8ce>'{0}'</color><color=#ede79f>. Try again later.</color>", playerName));
-                Console.WriteLine("[SPCH] proc() Exception caught: "+e.Message);
+                Console.WriteLine("[SPCH] proc() Exception caught: " + e.Message);
             }
         }
     }

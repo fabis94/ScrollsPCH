@@ -33,5 +33,7 @@ namespace ScrollsPCH
 			App.ChatUI.handleMessage(rcmm);
 			App.ArenaChat.ChatRooms.ChatMessage(rcmm);
 		}
+
+
 	}
 }
